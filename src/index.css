@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+/* ----------------------------------------------------
+   Supreme Font Family @font-face Declarations
+   Local files from /Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/
+   ---------------------------------------------------- */
+
+/* Supreme Thin (100) */
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Thin.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Thin.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-ThinItalic.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-ThinItalic.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Supreme Extralight (200) */
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Extralight.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Extralight.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Extralight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-ExtralightItalic.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-ExtralightItalic.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-ExtralightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Supreme Light (300) */
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Light.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Light.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-LightItalic.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-LightItalic.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Supreme Regular (400) */
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Regular.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Regular.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Italic.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Italic.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Supreme Medium (500) */
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Medium.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Medium.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-MediumItalic.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-MediumItalic.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Supreme Semibold (600 mapped to Supreme-Bold file / 600 weight) */
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Bold.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Bold.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Bold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Supreme Bold (700) */
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Bold.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Bold.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-BoldItalic.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-BoldItalic.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Supreme Extrabold (800) */
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Extrabold.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Extrabold.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-Extrabold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Supreme';
+  src: url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-ExtraboldItalic.woff2') format('woff2'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-ExtraboldItalic.woff') format('woff'),
+       url('/Fonts/Supreme_Complete/Supreme_Complete/Fonts/WEB/fonts/Supreme-ExtraboldItalic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: 'Supreme', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-supreme: 'Supreme', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  :root {
+    --bg-main: #f8f8fb;
+    --bg-surface: #ffffff;
+    --text-primary: #121214;
+    --text-secondary: #63636e;
+    --text-muted: #8e8e9a;
+    --border-subtle: rgba(226, 232, 240, 0.8);
+    --glass-card-bg: rgba(255, 255, 255, 0.72);
+    --glass-card-border: rgba(255, 255, 255, 0.85);
+  }
+
+  * {
+    border-color: var(--border-subtle);
+  }
+
+  html,
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Supreme', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+}
+
+/* Continuous Horizontal Marquee */
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+  will-change: transform;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  border: 2px solid var(--bg-main);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

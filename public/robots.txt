@@ -1,0 +1,9 @@
+# Robots.txt for Baskaran Portfolio
+User-agent: *
+Allow: /
+
+# Disallow indexing of build artifacts or non-public internal files
+Disallow: /node_modules/
+
+# Sitemap location
+Sitemap: https://baskaran.me/sitemap.xml
