@@ -5,6 +5,7 @@ import BrandsCreatedFor from './components/BrandsCreatedFor';
 import Services from './components/Services';
 import ContentSystem from './components/ContentSystem';
 import Portfolio from './components/Portfolio';
+import GraphicDesign from './components/GraphicDesign';
 import About from './components/About';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
@@ -63,6 +64,10 @@ export default function App() {
 
             {/* 6. PORTFOLIO ("Work That Speaks Before I Do." - Curated Video Carousel) */}
             <Portfolio />
+
+            {/* 6b. GRAPHIC DESIGN (Creative posts grid with lightbox) */}
+            <GraphicDesign />
+
 
             {/* 7. ABOUT ("The Person Behind the Content.") */}
             <About 

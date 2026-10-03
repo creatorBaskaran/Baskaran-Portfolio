@@ -23,13 +23,25 @@ export default function Hero({ onOpenProjectModal }) {
         className="hero-background absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none select-none"
         aria-hidden="true"
       >
-        <img
-          src="/hero-background-HD.png"
-          alt="Baskaran — Creative studio environment"
-          fetchPriority="high"
-          decoding="async"
-          className="w-full h-full object-cover object-center"
-        />
+        <picture>
+          {/* Mobile: custom mobile background (below 640px) */}
+          <source
+            srcSet="/hero-background-mobile 1.png"
+            media="(max-width: 639px)"
+          />
+          {/* Desktop / tablet: existing HD background (640px and above) */}
+          <source
+            srcSet="/hero-background-HD.png"
+            media="(min-width: 640px)"
+          />
+          <img
+            src="/hero-background-HD.png"
+            alt="Baskaran — Creative studio environment"
+            fetchPriority="high"
+            decoding="async"
+            className="w-full h-full object-cover object-center"
+          />
+        </picture>
       </div>
 
       {/* =========================================================================
@@ -63,7 +75,7 @@ export default function Hero({ onOpenProjectModal }) {
 
             {/* Supporting Copy */}
             <p className="text-base sm:text-lg text-slate-700 max-w-xl font-medium leading-relaxed drop-shadow-xs">
-              Strategy, content creation, and social growth, all working together to turn your ideas into content that gets attention, builds trust, and drives growth.
+              Strategy, content creation and social growth. All working together to turn your ideas into content that gets attention, builds trust and drives growth.
             </p>
 
             {/* CTAs with fine borders and soft shadows */}
