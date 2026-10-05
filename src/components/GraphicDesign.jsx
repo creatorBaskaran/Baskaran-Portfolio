@@ -8,6 +8,7 @@ import { graphicDesignCreatives } from '../data/graphicDesignData';
 function Lightbox({ creatives, startIndex, onClose }) {
   const [index, setIndex] = useState(startIndex);
   const current = creatives[index];
+  const touchStartXRef = React.useRef(0);
 
   const handlePrev = useCallback(() => {
     setIndex((i) => (i - 1 + creatives.length) % creatives.length);
@@ -16,6 +17,20 @@ function Lightbox({ creatives, startIndex, onClose }) {
   const handleNext = useCallback(() => {
     setIndex((i) => (i + 1) % creatives.length);
   }, [creatives.length]);
+
+  // Touch swipe support for mobile
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    const diff = e.changedTouches[0].clientX - touchStartXRef.current;
+    if (diff > 45) {
+      handlePrev();
+    } else if (diff < -45) {
+      handleNext();
+    }
+  };
 
   // Keyboard navigation
   useEffect(() => {
@@ -40,15 +55,17 @@ function Lightbox({ creatives, startIndex, onClose }) {
       role="dialog"
       aria-modal="true"
       aria-label="Graphic design preview"
-      className="fixed inset-0 z-[9999] flex items-center justify-center"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 select-none"
       onClick={onClose}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Backdrop */}
       <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md" />
 
       {/* Panel */}
       <div
-        className="relative z-10 flex flex-col items-center max-w-[90vw] max-h-[90vh]"
+        className="relative z-10 flex flex-col items-center max-w-[94vw] sm:max-w-[90vw] max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Image */}
@@ -56,21 +73,21 @@ function Lightbox({ creatives, startIndex, onClose }) {
           key={current.id}
           src={current.src}
           alt={current.alt}
-          className="max-w-full max-h-[80vh] w-auto h-auto object-contain rounded-2xl shadow-2xl animate-fadeIn"
+          className="max-w-full max-h-[76vh] sm:max-h-[80vh] w-auto h-auto object-contain rounded-2xl shadow-2xl animate-fadeIn"
           draggable={false}
         />
 
         {/* Counter */}
-        <p className="mt-3 text-xs font-mono text-white/50 select-none">
+        <p className="mt-3 text-xs font-mono text-white/60 select-none">
           {index + 1} / {creatives.length}
         </p>
       </div>
 
-      {/* Close Button */}
+      {/* Close Button - 44px touch target */}
       <button
         onClick={onClose}
         aria-label="Close preview"
-        className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors"
+        className="absolute top-3 right-3 sm:top-6 sm:right-6 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 border border-white/20 flex items-center justify-center transition-colors"
       >
         <X className="w-5 h-5 text-white" />
       </button>
@@ -81,14 +98,14 @@ function Lightbox({ creatives, startIndex, onClose }) {
           <button
             onClick={(e) => { e.stopPropagation(); handlePrev(); }}
             aria-label="Previous creative"
-            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors"
+            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 border border-white/20 flex items-center justify-center transition-colors"
           >
             <ChevronLeft className="w-5 h-5 text-white" />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); handleNext(); }}
             aria-label="Next creative"
-            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-colors"
+            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 border border-white/20 flex items-center justify-center transition-colors"
           >
             <ChevronRight className="w-5 h-5 text-white" />
           </button>

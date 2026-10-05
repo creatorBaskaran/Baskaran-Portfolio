@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Send, Sparkles, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -12,6 +12,22 @@ export default function ProjectModal({ isOpen, onClose }) {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+
+  // Close on Escape key and lock body scroll
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = prev;
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -42,7 +58,12 @@ export default function ProjectModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div 
+      role="dialog"
+      aria-modal="true"
+      aria-label="Project Inquiry"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+    >
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-slate-950/40 backdrop-blur-md transition-opacity duration-300"
@@ -50,12 +71,13 @@ export default function ProjectModal({ isOpen, onClose }) {
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-xl bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-[32px] p-6 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.14),0_1px_3px_rgba(0,0,0,0.02)] z-10 my-8 transition-all animate-fadeIn text-left">
+      <div className="relative w-full max-w-xl bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-[28px] sm:rounded-[32px] p-5 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.14),0_1px_3px_rgba(0,0,0,0.02)] z-10 my-6 sm:my-8 transition-all animate-fadeIn text-left">
         
-        {/* Close Button */}
+        {/* Close Button - 40px touch target */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition-colors"
+          aria-label="Close modal"
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition-colors"
         >
           <X className="w-4 h-4" />
         </button>

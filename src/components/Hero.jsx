@@ -23,23 +23,23 @@ export default function Hero({ onOpenProjectModal }) {
         className="hero-background absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none select-none"
         aria-hidden="true"
       >
-        <picture>
-          {/* Mobile: custom mobile background (below 640px) */}
+        <picture className="w-full h-full block">
+          {/* Mobile and tablet portrait screens (up to 834px): custom vertical background */}
           <source
-            srcSet="/hero-background-mobile 1.png"
-            media="(max-width: 639px)"
+            srcSet="/hero-background-mobile%201.png"
+            media="(max-width: 834px)"
           />
-          {/* Desktop / tablet: existing HD background (640px and above) */}
+          {/* Desktop and landscape tablet (835px and above): original HD background */}
           <source
             srcSet="/hero-background-HD.png"
-            media="(min-width: 640px)"
+            media="(min-width: 835px)"
           />
           <img
             src="/hero-background-HD.png"
             alt="Baskaran — Creative studio environment"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-top sm:object-center"
           />
         </picture>
       </div>
@@ -49,10 +49,10 @@ export default function Hero({ onOpenProjectModal }) {
           Highlighted with fine strokes, soft shadows, and clean contrast
       ========================================================================= */}
       <div className="hero-content relative z-[2] max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           
           {/* Left Column: Headline, Copy & CTAs */}
-          <div className="lg:col-span-8 space-y-7 text-left max-w-2xl">
+          <div className="lg:col-span-8 space-y-6 sm:space-y-7 text-left max-w-2xl">
             
             {/* Status Pill with fine stroke & soft shadow */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-slate-200/90 shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
@@ -63,9 +63,9 @@ export default function Hero({ onOpenProjectModal }) {
               <span className="text-xs font-semibold text-slate-800">Available for freelance projects</span>
             </div>
 
-            {/* Headline with high contrast */}
+            {/* Headline with high contrast & fluid responsive scaling */}
             <div className="space-y-1">
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-950 tracking-[-0.04em] leading-[1.06] drop-shadow-xs">
+              <h1 className="text-3xl sm:text-6xl lg:text-7xl font-extrabold text-slate-950 tracking-[-0.04em] leading-[1.08] sm:leading-[1.06] drop-shadow-xs">
                 Your One-Person <br />
                 <span className="text-slate-900">
                   Content Team.
@@ -79,10 +79,10 @@ export default function Hero({ onOpenProjectModal }) {
             </p>
 
             {/* CTAs with fine borders and soft shadows */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-2">
+            <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-3 sm:gap-3.5 pt-2">
               <button
                 onClick={onOpenProjectModal}
-                className="group inline-flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-800 text-white font-semibold text-sm sm:text-base px-6 py-3.5 rounded-full transition-all duration-300 shadow-[0_10px_25px_rgba(0,0,0,0.18)] hover:shadow-[0_14px_32px_rgba(0,0,0,0.24)] border border-slate-800 active:scale-[0.98]"
+                className="group inline-flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-800 text-white font-semibold text-sm sm:text-base px-6 py-3.5 rounded-full transition-all duration-300 shadow-[0_10px_25px_rgba(0,0,0,0.18)] hover:shadow-[0_14px_32px_rgba(0,0,0,0.24)] border border-slate-800 active:scale-[0.98] w-full xs:w-auto"
               >
                 <span>Start a Project</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -90,7 +90,7 @@ export default function Hero({ onOpenProjectModal }) {
 
               <a
                 href="#work"
-                className="inline-flex items-center justify-center gap-2 bg-white/95 hover:bg-white text-slate-900 font-semibold text-sm sm:text-base px-5 py-3.5 rounded-full border border-slate-200/90 shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all duration-200 hover:border-slate-300 active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 bg-white/95 hover:bg-white text-slate-900 font-semibold text-sm sm:text-base px-5 py-3.5 rounded-full border border-slate-200/90 shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all duration-200 hover:border-slate-300 active:scale-[0.98] w-full xs:w-auto"
               >
                 <span>View My Work</span>
                 <ArrowDown className="w-4 h-4 text-slate-600" />

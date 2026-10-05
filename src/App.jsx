@@ -32,7 +32,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative bg-[#f8f8fb] text-[#121214] min-h-screen selection:bg-purple-100 selection:text-purple-900 font-sans">
+    <div className="relative bg-[#f8f8fb] text-[#121214] min-h-screen selection:bg-purple-100 selection:text-purple-900 font-sans overflow-x-hidden">
       
       {/* Main Content Sections */}
       <main>

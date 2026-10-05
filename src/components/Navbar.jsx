@@ -1,8 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 
 export default function Navbar({ onOpenProjectModal }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on Escape key and prevent background scroll
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+
+    if (mobileMenuOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   const navLinks = [
     { name: 'Services', href: '#services' },
@@ -25,9 +44,9 @@ export default function Navbar({ onOpenProjectModal }) {
   );
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-30 w-full flex justify-center px-4 sm:px-6 pt-5 sm:pt-6 pointer-events-none">
+    <header className="absolute top-0 left-0 right-0 z-30 w-full flex justify-center px-3 sm:px-6 pt-4 sm:pt-6 pointer-events-none">
       <nav
-        className="w-full max-w-5xl rounded-full px-5 sm:px-6 py-3 flex items-center justify-between transition-all duration-300 ease-out backdrop-blur-xl bg-white/85 border border-slate-200/90 shadow-[0_8px_28px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.02)] pointer-events-auto"
+        className="w-full max-w-5xl rounded-full px-3.5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between transition-all duration-300 ease-out backdrop-blur-xl bg-white/85 border border-slate-200/90 shadow-[0_8px_28px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.02)] pointer-events-auto"
       >
         {/* Brand Logo */}
         <a
@@ -76,43 +95,55 @@ export default function Navbar({ onOpenProjectModal }) {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
-            className="p-2 rounded-full md:hidden text-slate-700 hover:text-slate-950 hover:bg-slate-100 transition-colors"
+            aria-expanded={mobileMenuOpen}
+            className="p-2 rounded-full md:hidden text-slate-700 hover:text-slate-950 hover:bg-slate-100 transition-colors focus:outline-hidden focus:ring-2 focus:ring-slate-950/20"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile Drawer (Natural dropdown) */}
+      {/* Mobile Backdrop & Drawer */}
       {mobileMenuOpen && (
-        <div className="absolute top-20 left-4 right-4 z-40 bg-white/95 backdrop-blur-2xl rounded-3xl p-6 border border-slate-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.12)] space-y-4 md:hidden animate-fadeIn pointer-events-auto">
-          <div className="flex flex-col space-y-2">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className="px-4 py-3 text-base font-semibold text-slate-800 hover:text-black rounded-2xl hover:bg-slate-100 transition-colors flex items-center justify-between"
-              >
-                <span>{link.name}</span>
-                <span className="text-xs text-slate-400 font-mono">0{navLinks.indexOf(link) + 1}</span>
-              </a>
-            ))}
-          </div>
+        <>
+          <div
+            className="fixed inset-0 bg-slate-950/30 backdrop-blur-xs z-35 md:hidden pointer-events-auto"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <div 
+            role="dialog"
+            aria-label="Mobile Navigation Menu"
+            className="absolute top-20 left-3 right-3 sm:left-4 sm:right-4 z-40 bg-white/95 backdrop-blur-2xl rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.15)] space-y-4 md:hidden animate-fadeIn pointer-events-auto"
+          >
+            <div className="flex flex-col space-y-1 sm:space-y-2">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className="px-4 py-3 text-base font-semibold text-slate-800 hover:text-slate-950 rounded-2xl hover:bg-slate-100 active:bg-slate-200/70 transition-colors flex items-center justify-between"
+                >
+                  <span>{link.name}</span>
+                  <span className="text-xs text-slate-400 font-mono">0{navLinks.indexOf(link) + 1}</span>
+                </a>
+              ))}
+            </div>
 
-          <div className="pt-4 border-t border-slate-100">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenProjectModal();
-              }}
-              className="w-full flex items-center justify-center gap-2 bg-slate-950 text-white font-semibold py-3 rounded-2xl shadow-[0_4px_14px_rgba(0,0,0,0.15)] text-xs sm:text-sm"
-            >
-              <span>Start a Project</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </button>
+            <div className="pt-3 border-t border-slate-100">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenProjectModal();
+                }}
+                className="w-full flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-800 text-white font-semibold py-3.5 rounded-2xl shadow-[0_4px_14px_rgba(0,0,0,0.15)] text-sm active:scale-[0.99] transition-all"
+              >
+                <span>Start a Project</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </header>
   );

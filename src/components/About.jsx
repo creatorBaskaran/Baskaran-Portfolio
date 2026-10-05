@@ -11,8 +11,8 @@ export default function About({ onOpenAboutModal }) {
           
           {/* Left Column: Creator Portrait Card */}
           <div className="lg:col-span-5 relative">
-            <div className="relative rounded-[36px] overflow-hidden bg-gradient-to-tr from-slate-900 via-slate-800 to-indigo-950 p-2 shadow-[0_25px_60px_rgba(0,0,0,0.1)] border border-white/80">
-              <div className="relative h-[420px] sm:h-[480px] w-full rounded-[28px] overflow-hidden bg-slate-950">
+            <div className="relative rounded-[28px] sm:rounded-[36px] overflow-hidden bg-gradient-to-tr from-slate-900 via-slate-800 to-indigo-950 p-2 shadow-[0_25px_60px_rgba(0,0,0,0.1)] border border-white/80 max-w-md mx-auto lg:max-w-none">
+              <div className="relative h-[360px] xs:h-[400px] sm:h-[480px] w-full rounded-[22px] sm:rounded-[28px] overflow-hidden bg-slate-950">
                 <img 
                   src="/baskaran - DP.png" 
                   alt="Baskaran — Video Editor and Content & Growth Partner based in Tamil Nadu, India"
@@ -22,13 +22,13 @@ export default function About({ onOpenAboutModal }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
 
                 {/* Floating Badge on Portrait */}
-                <div className="absolute bottom-5 left-5 right-5 bg-white/90 backdrop-blur-xl rounded-2xl p-4 border border-white/80 shadow-lg text-left">
-                  <div className="flex items-center justify-between">
+                <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-5 right-3 sm:right-5 bg-white/90 backdrop-blur-xl rounded-2xl p-3 sm:p-4 border border-white/80 shadow-lg text-left">
+                  <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2">
                     <div>
                       <div className="text-sm font-bold text-slate-950">Baskaran</div>
                       <div className="text-xs text-slate-500 font-medium">Content & Growth Partner</div>
                     </div>
-                    <div className="flex items-center gap-1 text-[11px] font-mono text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
+                    <div className="flex items-center gap-1 text-[11px] font-mono text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full shrink-0">
                       <MapPin className="w-3 h-3 text-rose-500" />
                       <span>Tamil Nadu, India</span>
                     </div>

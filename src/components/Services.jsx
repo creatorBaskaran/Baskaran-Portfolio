@@ -69,13 +69,16 @@ export default function Services({ onOpenProjectModal }) {
         </div>
 
         {/* 3 Glass Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {serviceList.map((service) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {serviceList.map((service, index) => {
             const Icon = service.icon;
+            const isThirdCard = index === 2;
             return (
               <div
                 key={service.id}
-                className="group relative bg-white/85 backdrop-blur-xl border border-slate-200/90 hover:border-slate-300 rounded-[28px] p-7 sm:p-8 flex flex-col justify-between shadow-[0_14px_38px_rgba(0,0,0,0.05),0_2px_6px_rgba(0,0,0,0.02)] hover:shadow-[0_22px_50px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1.5"
+                className={`group relative bg-white/85 backdrop-blur-xl border border-slate-200/90 hover:border-slate-300 rounded-[28px] p-6 sm:p-8 flex flex-col justify-between shadow-[0_14px_38px_rgba(0,0,0,0.05),0_2px_6px_rgba(0,0,0,0.02)] hover:shadow-[0_22px_50px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1.5 ${
+                  isThirdCard ? 'md:col-span-2 lg:col-span-1 md:max-w-md md:mx-auto md:w-full lg:max-w-none' : ''
+                }`}
               >
                 {/* Subtle Inner Glow */}
                 <div className={`absolute inset-0 rounded-[28px] bg-gradient-to-b ${service.accentGlow} opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`} />

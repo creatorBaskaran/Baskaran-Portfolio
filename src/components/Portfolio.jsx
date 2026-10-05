@@ -26,6 +26,20 @@ export default function Portfolio() {
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartXRef = useRef(0);
+  const dragStartYRef = useRef(0);
+  const isVerticalScrollRef = useRef(false);
+  const isHorizontalSwipeRef = useRef(false);
+
+  // Responsive screen width tracker for 3D spatial calculations
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  );
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const videoRefs = useRef([]);
   const stageRef = useRef(null);
@@ -184,22 +198,52 @@ export default function Portfolio() {
 
   // Touch and Mouse Drag / Swipe Handlers
   const handleTouchStart = (e) => {
-    setIsDragging(true);
     dragStartXRef.current = e.touches[0].clientX;
+    dragStartYRef.current = e.touches[0].clientY;
+    isVerticalScrollRef.current = false;
+    isHorizontalSwipeRef.current = false;
+    setIsDragging(true);
   };
 
   const handleTouchMove = (e) => {
     if (!isDragging) return;
     const currentX = e.touches[0].clientX;
-    setDragOffset(currentX - dragStartXRef.current);
+    const currentY = e.touches[0].clientY;
+    const deltaX = currentX - dragStartXRef.current;
+    const deltaY = currentY - dragStartYRef.current;
+
+    // Detect intent on initial movement: vertical scroll vs horizontal carousel swipe
+    if (!isVerticalScrollRef.current && !isHorizontalSwipeRef.current) {
+      if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 6) {
+        // User wants to scroll the page vertically — do not hijack!
+        isVerticalScrollRef.current = true;
+        setIsDragging(false);
+        setDragOffset(0);
+        return;
+      } else if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 6) {
+        isHorizontalSwipeRef.current = true;
+      }
+    }
+
+    if (isVerticalScrollRef.current) return;
+
+    if (isHorizontalSwipeRef.current) {
+      setDragOffset(deltaX);
+    }
   };
 
   const handleTouchEnd = () => {
-    if (!isDragging) return;
+    if (!isDragging && !isHorizontalSwipeRef.current) {
+      setDragOffset(0);
+      return;
+    }
     setIsDragging(false);
-    if (dragOffset > 50) {
+    isHorizontalSwipeRef.current = false;
+    isVerticalScrollRef.current = false;
+
+    if (dragOffset > 45) {
       handlePrev();
-    } else if (dragOffset < -50) {
+    } else if (dragOffset < -45) {
       handleNext();
     } else {
       setDragOffset(0);
@@ -280,11 +324,11 @@ export default function Portfolio() {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="relative w-full py-6 sm:py-10 flex items-center justify-center cursor-grab active:cursor-grabbing"
+          className="relative w-full py-6 sm:py-10 flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden"
           style={{
-            perspective: '1200px',
+            perspective: windowWidth < 640 ? '900px' : '1200px',
             transformStyle: 'preserve-3d',
-            minHeight: '620px',
+            minHeight: windowWidth < 640 ? '510px' : '620px',
           }}
         >
           {/* Flanking Desktop Navigation Arrow: Previous (Left) */}
@@ -313,7 +357,7 @@ export default function Portfolio() {
 
           {/* 3D Arc Video Cards Container */}
           <div 
-            className="relative w-full max-w-[320px] sm:max-w-[350px] md:max-w-[370px] aspect-[9/16] flex items-center justify-center"
+            className="relative w-full max-w-[270px] xs:max-w-[290px] sm:max-w-[340px] md:max-w-[370px] aspect-[9/16] flex items-center justify-center"
             style={{ transformStyle: 'preserve-3d' }}
           >
             {curatedPortfolioVideos.map((item, index) => {
@@ -330,6 +374,9 @@ export default function Portfolio() {
               if (absOffset > 3.5) return null;
 
               const isCenter = index === currentIndex;
+              const isMobile = windowWidth < 640;
+              const isTablet = windowWidth >= 640 && windowWidth < 1024;
+              const spacingBase = isMobile ? 120 : isTablet ? 175 : 230;
 
               // 3D Spatial Transforms: curve away towards edges, center faces forward
               let translateX = 0;
@@ -352,12 +399,16 @@ export default function Portfolio() {
                 // Directional sign
                 const sign = effectiveOffset > 0 ? 1 : -1;
                 
-                // Realistic progressive 3D spacing
-                translateX = sign * (Math.pow(absOffset, 0.85) * 230);
-                translateZ = -(absOffset * 95);
+                // Realistic progressive 3D spacing (preserves exact 230 on desktop >= 1024px)
+                translateX = sign * (Math.pow(absOffset, 0.85) * spacingBase);
+                translateZ = -(absOffset * (isMobile ? 70 : 95));
                 rotateY = sign * -(Math.min(32, absOffset * 15));
-                scale = Math.max(0.65, 1 - absOffset * 0.13);
-                opacity = Math.max(0.1, 1 - absOffset * 0.28);
+                scale = isMobile 
+                  ? Math.max(0.6, 1 - absOffset * 0.18) 
+                  : Math.max(0.65, 1 - absOffset * 0.13);
+                opacity = isMobile 
+                  ? Math.max(0.08, 1 - absOffset * 0.35) 
+                  : Math.max(0.1, 1 - absOffset * 0.28);
                 blur = absOffset * 0.8;
                 zIndex = Math.round(30 - absOffset * 5);
               }
@@ -540,20 +591,20 @@ export default function Portfolio() {
         {/* =========================================================================
             CAROUSEL BOTTOM NAVIGATION & SLIDE DOTS
         ========================================================================= */}
-        <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-lg mx-auto px-4">
+        <div className="mt-8 sm:mt-10 flex flex-row items-center justify-between gap-2 sm:gap-4 max-w-sm sm:max-w-lg mx-auto px-2 sm:px-4">
           
           {/* Previous Button */}
           <button
             onClick={handlePrev}
             aria-label="Previous video"
-            className="px-4 py-2 rounded-full bg-white hover:bg-slate-100 text-slate-800 text-xs font-semibold border border-slate-200/90 shadow-xs flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95"
+            className="px-3 sm:px-4 py-2 rounded-full bg-white hover:bg-slate-100 text-slate-800 text-xs font-semibold border border-slate-200/90 shadow-xs flex items-center gap-1 sm:gap-1.5 transition-all hover:scale-105 active:scale-95 shrink-0"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span>Previous</span>
+            <span className="hidden xs:inline">Previous</span>
           </button>
 
           {/* Slide Dots Indicator */}
-          <div className="flex items-center gap-1.5 flex-wrap justify-center">
+          <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap justify-center max-w-[160px] sm:max-w-none">
             {curatedPortfolioVideos.map((video, idx) => {
               const isActive = idx === currentIndex;
               return (
@@ -561,10 +612,10 @@ export default function Portfolio() {
                   key={video.id}
                   onClick={() => changeSlide(idx)}
                   aria-label={`Go to video ${idx + 1}`}
-                  className={`h-2 rounded-full transition-all duration-300 ${
+                  className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
                     isActive 
-                      ? 'w-7 bg-slate-950' 
-                      : 'w-2 bg-slate-300 hover:bg-slate-400'
+                      ? 'w-5 sm:w-7 bg-slate-950' 
+                      : 'w-1.5 sm:w-2 bg-slate-300 hover:bg-slate-400'
                   }`}
                 />
               );
@@ -575,9 +626,9 @@ export default function Portfolio() {
           <button
             onClick={handleNext}
             aria-label="Next video"
-            className="px-4 py-2 rounded-full bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95"
+            className="px-3 sm:px-4 py-2 rounded-full bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs flex items-center gap-1 sm:gap-1.5 transition-all hover:scale-105 active:scale-95 shrink-0"
           >
-            <span>Next</span>
+            <span className="hidden xs:inline">Next</span>
             <ChevronRight className="w-4 h-4" />
           </button>
 

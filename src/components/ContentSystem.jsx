@@ -14,6 +14,17 @@ export default function ContentSystem() {
   const [activeStage, setActiveStage] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
+  // Responsive screen width tracker for adaptive circular orbit
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  );
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const stages = [
     {
       id: "01",
@@ -127,7 +138,7 @@ export default function ContentSystem() {
             
             {/* SVG Orbit Path */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <svg className="w-[320px] h-[320px] sm:w-[440px] sm:h-[440px]" viewBox="0 0 440 440">
+              <svg className="w-[270px] h-[270px] xs:w-[310px] xs:h-[310px] sm:w-[440px] sm:h-[440px]" viewBox="0 0 440 440">
                 <circle
                   cx="220"
                   cy="220"
@@ -160,15 +171,15 @@ export default function ContentSystem() {
             </div>
 
             {/* Center Core Glass Hub */}
-            <div className="relative z-10 w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-white/90 backdrop-blur-2xl border border-slate-200/90 shadow-[0_12px_36px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center text-center p-4">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-semibold">
+            <div className="relative z-10 w-32 h-32 sm:w-44 sm:h-44 rounded-full bg-white/90 backdrop-blur-2xl border border-slate-200/90 shadow-[0_12px_36px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center text-center p-3 sm:p-4">
+              <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-slate-400 font-semibold">
                 SYSTEM CORE
               </span>
-              <span className="text-base sm:text-lg font-extrabold text-slate-950 tracking-tight mt-0.5 leading-tight">
+              <span className="text-sm sm:text-lg font-extrabold text-slate-950 tracking-tight mt-0.5 leading-tight">
                 CONTENT<br />SYSTEM
               </span>
-              <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-100">
-                <Repeat2 className="w-3 h-3 animate-spin" style={{ animationDuration: '6s' }} />
+              <div className="mt-1.5 sm:mt-2 inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-bold text-purple-700 bg-purple-50 px-2 sm:px-2.5 py-0.5 rounded-full border border-purple-100">
+                <Repeat2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 animate-spin" style={{ animationDuration: '6s' }} />
                 <span>Compounding</span>
               </div>
             </div>
@@ -179,7 +190,10 @@ export default function ContentSystem() {
               const isCurrent = activeStage === idx;
               
               const angle = (idx / stages.length) * 2 * Math.PI - Math.PI / 2;
-              const radius = typeof window !== 'undefined' && window.innerWidth < 640 ? 135 : 170;
+              // Responsive radius based on actual viewport width
+              const isSmallMobile = windowWidth < 380;
+              const isMobile = windowWidth < 640;
+              const radius = isSmallMobile ? 112 : isMobile ? 132 : 170;
               const x = Math.cos(angle) * radius;
               const y = Math.sin(angle) * radius;
 
@@ -201,13 +215,14 @@ export default function ContentSystem() {
                       setIsAutoPlaying(false);
                     }}
                     onMouseLeave={() => setIsAutoPlaying(true)}
-                    className={`group relative flex items-center gap-2 px-3 py-2 rounded-2xl transition-all duration-300 ${
+                    aria-label={`Select stage 0${idx + 1}: ${stage.name}`}
+                    className={`group relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl transition-all duration-300 ${
                       isCurrent
                         ? 'bg-slate-950 text-white shadow-[0_12px_28px_rgba(0,0,0,0.18)] scale-110 ring-2 ring-purple-400/40'
                         : 'bg-white/90 hover:bg-white backdrop-blur-xl text-slate-800 border border-slate-200/90 shadow-[0_6px_20px_rgba(0,0,0,0.05),0_1px_2px_rgba(0,0,0,0.02)] hover:scale-105'
                     }`}
                   >
-                    <div className={`p-1.5 rounded-xl ${isCurrent ? 'bg-white/20' : stage.bg}`}>
+                    <div className={`p-1 sm:p-1.5 rounded-lg sm:rounded-xl ${isCurrent ? 'bg-white/20' : stage.bg}`}>
                       <Icon className={`w-3.5 h-3.5 ${isCurrent ? 'text-white' : stage.color}`} />
                     </div>
                     <div className="text-left pr-1 hidden sm:block">
@@ -222,10 +237,10 @@ export default function ContentSystem() {
 
           {/* Right Column: Stage Details Display */}
           <div className="lg:col-span-5 text-left">
-            <div className="bg-white/85 backdrop-blur-2xl border border-slate-200/90 rounded-[32px] p-6 sm:p-8 shadow-[0_16px_40px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.02)] space-y-5">
+            <div className="bg-white/85 backdrop-blur-2xl border border-slate-200/90 rounded-[28px] sm:rounded-[32px] p-5 sm:p-8 shadow-[0_16px_40px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.02)] space-y-4 sm:space-y-5">
               
               {/* Stage Badge & Step Indicator */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-mono font-medium">
                   <span>STAGE 0{activeStage + 1} / 06</span>
                   <span>•</span>
@@ -237,8 +252,8 @@ export default function ContentSystem() {
               </div>
 
               {/* Title & Summary */}
-              <div className="space-y-2">
-                <h3 className="text-2xl font-extrabold text-slate-950 tracking-tight">
+              <div className="space-y-1.5 sm:space-y-2">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-950 tracking-tight">
                   {stages[activeStage].summary}
                 </h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
@@ -247,7 +262,7 @@ export default function ContentSystem() {
               </div>
 
               {/* Tangible Outcome Box */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start gap-3">
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
                   <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
@@ -260,9 +275,9 @@ export default function ContentSystem() {
               </div>
 
               {/* Bottom Quick Flow Pills */}
-              <div className="pt-2 flex items-center justify-between text-xs font-medium text-slate-500">
-                <span>Goal → Strategy → Create → Publish → Optimize → Scale ↻</span>
-                <span className="font-mono text-purple-600 font-bold">Iterative Engine</span>
+              <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 sm:gap-2 text-xs font-medium text-slate-500">
+                <span className="leading-relaxed">Goal → Strategy → Create → Publish → Optimize → Scale ↻</span>
+                <span className="font-mono text-purple-600 font-bold shrink-0">Iterative Engine</span>
               </div>
             </div>
           </div>

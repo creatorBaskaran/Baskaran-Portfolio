@@ -71,12 +71,43 @@ export default function InteractiveGlassGrid() {
       }
     };
 
+    const handleTouchMove = (e) => {
+      if (!e.touches || !e.touches[0]) return;
+      const touch = e.touches[0];
+      const rect = container.getBoundingClientRect();
+      const isInside = (
+        touch.clientX >= rect.left &&
+        touch.clientX <= rect.right &&
+        touch.clientY >= rect.top &&
+        touch.clientY <= rect.bottom
+      );
+
+      if (isInside) {
+        mouseRef.current = {
+          x: touch.clientX - rect.left,
+          y: touch.clientY - rect.top,
+          active: true,
+          opacity: 0.8
+        };
+      } else {
+        mouseRef.current.active = false;
+        mouseRef.current.opacity = 0;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      mouseRef.current.active = false;
+      mouseRef.current.opacity = 0;
+    };
+
     const handleMouseLeave = () => {
       mouseRef.current.active = false;
       mouseRef.current.opacity = 0;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
 
     let currentX = -1000;
@@ -151,6 +182,8 @@ export default function InteractiveGlassGrid() {
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
       document.removeEventListener('mouseleave', handleMouseLeave);
       if (animFrameId.current) cancelAnimationFrame(animFrameId.current);
     };
