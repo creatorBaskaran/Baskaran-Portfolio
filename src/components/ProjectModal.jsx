@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Send, Sparkles, CheckCircle2 } from 'lucide-react';
+import { X, Send, Sparkles, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function ProjectModal({ isOpen, onClose }) {
@@ -12,6 +12,9 @@ export default function ProjectModal({ isOpen, onClose }) {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [honeypot, setHoneypot] = useState('');
 
   // Close on Escape key and lock body scroll
   useEffect(() => {
@@ -47,14 +50,58 @@ export default function ProjectModal({ isOpen, onClose }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    confetti({
-      particleCount: 80,
-      spread: 60,
-      origin: { y: 0.6 }
-    });
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        company: '',
+        phone: '',
+        projectType: selectedServices.length > 0 ? selectedServices.join(', ') : 'Content Creation',
+        budget: '',
+        website: formData.handle || '',
+        message: formData.message,
+        source: 'Website Modal',
+        page: typeof window !== 'undefined' ? window.location.pathname : '/',
+        referrer: typeof document !== 'undefined' ? document.referrer : '',
+        utm_source: searchParams?.get('utm_source') || '',
+        utm_medium: searchParams?.get('utm_medium') || '',
+        utm_campaign: searchParams?.get('utm_campaign') || '',
+        utm_content: searchParams?.get('utm_content') || '',
+        utm_term: searchParams?.get('utm_term') || '',
+        honeypot: honeypot || ''
+      };
+
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to submit project request. Please try again.');
+      }
+
+      setSubmitted(true);
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { y: 0.6 }
+      });
+    } catch (err) {
+      setSubmitError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -202,6 +249,7 @@ export default function ProjectModal({ isOpen, onClose }) {
               <label className="text-xs font-semibold text-slate-700">Project Details & Vision</label>
               <textarea
                 rows="3"
+                required
                 placeholder="What are your goals? Share any sample inspiration or current volume..."
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -209,14 +257,47 @@ export default function ProjectModal({ isOpen, onClose }) {
               />
             </div>
 
+            {/* Anti-spam Honeypot field (hidden from real users) */}
+            <div className="hidden" aria-hidden="true">
+              <input
+                type="text"
+                name="_gotcha"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+            </div>
+
+            {/* Error Message Alert */}
+            {submitError && (
+              <div 
+                role="alert"
+                className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-start gap-2.5 animate-fadeIn"
+              >
+                <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                <span>{submitError}</span>
+              </div>
+            )}
+
             {/* Submit */}
             <div className="pt-2">
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-800 text-white font-semibold py-3.5 rounded-2xl transition-all duration-200 shadow-md active:scale-98"
+                disabled={isSubmitting}
+                className="w-full flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-2xl transition-all duration-200 shadow-md active:scale-98"
               >
-                <span>Send Project Request</span>
-                <Send className="w-4 h-4" />
+                {isSubmitting ? (
+                  <>
+                    <span>Sending Request...</span>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    <span>Send Project Request</span>
+                    <Send className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </form>
