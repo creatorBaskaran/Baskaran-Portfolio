@@ -26,7 +26,7 @@ export default function Hero({ onOpenProjectModal }) {
         <picture className="w-full h-full block">
           {/* Mobile and tablet portrait screens (up to 834px): custom vertical background */}
           <source
-            srcSet="/hero-background-mobile%201.png"
+            srcSet="/Hero%20BG%20-%20Mobile%20Version.png"
             media="(max-width: 834px)"
           />
           {/* Desktop and landscape tablet (835px and above): original HD background */}
