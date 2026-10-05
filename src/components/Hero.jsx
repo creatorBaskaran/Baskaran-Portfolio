@@ -39,7 +39,7 @@ export default function Hero({ onOpenProjectModal }) {
             alt="Baskaran — Creative studio environment"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-top sm:object-center"
+            className="w-full h-full object-cover object-center"
           />
         </picture>
       </div>
