@@ -81,7 +81,7 @@ function normalizePrivateKey(rawKey) {
 function getGoogleSheetsClient() {
   const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   const rawKey = process.env.GOOGLE_PRIVATE_KEY;
-  const sheetId = process.env.GOOGLE_SHEET_ID;
+  const sheetId = process.env.GOOGLE_SHEET_ID ? process.env.GOOGLE_SHEET_ID.replace(/['"]/g, '').trim() : undefined;
 
   if (!clientEmail || !rawKey || !sheetId) {
     throw new Error('Google Sheets server configuration is missing.');
