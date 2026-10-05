@@ -45,19 +45,50 @@ function checkDuplicate(key) {
 }
 
 /**
+ * Safely normalize the Google service account private key.
+ * Handles:
+ * - Literal escaped newlines (\n) converted to actual newlines
+ * - Already existing real newlines preserved without corruption
+ * - Surrounding quotes (double or single quotes commonly added when pasting into Vercel UI)
+ * - Windows-style carriage returns (\r\n or \r)
+ * @param {string} rawKey
+ * @returns {string}
+ */
+function normalizePrivateKey(rawKey) {
+  if (!rawKey) return '';
+  let key = rawKey.trim();
+
+  // Strip wrapping double or single quotes if present
+  if (
+    (key.startsWith('"') && key.endsWith('"')) ||
+    (key.startsWith("'") && key.endsWith("'"))
+  ) {
+    key = key.slice(1, -1).trim();
+  }
+
+  // Convert escaped literal newlines (\n) into actual newlines
+  key = key.replace(/\\n/g, '\n');
+
+  // Normalize Windows-style carriage returns to standard newlines
+  key = key.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+  return key;
+}
+
+/**
  * Initialize authenticated Google Sheets client.
  */
 function getGoogleSheetsClient() {
   const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+  const rawKey = process.env.GOOGLE_PRIVATE_KEY;
   const sheetId = process.env.GOOGLE_SHEET_ID;
 
-  if (!clientEmail || !privateKey || !sheetId) {
+  if (!clientEmail || !rawKey || !sheetId) {
     throw new Error('Google Sheets server configuration is missing.');
   }
 
-  // Handle escaped newlines (\n) when stored in environment variables
-  privateKey = privateKey.replace(/\\n/g, '\n');
+  // Safely normalize private key for Google JWT auth
+  const privateKey = normalizePrivateKey(rawKey);
 
   const auth = new google.auth.JWT({
     email: clientEmail,
